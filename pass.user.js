@@ -1,25 +1,27 @@
 // ==UserScript==
 // @name          ccu save id&password
 // @namespace     http://www.cs.ccu.edu.tw/~hcwei95u/
-// @description   add a button to save id and password 
+// @description   Add a button to save id and password 
 //
 // chrome
+// @match       http://portal.ccu.edu.tw/index.php
 // @match       http://ecourse.elearning.ccu.edu.tw/
 // @match	http://myhome.ccu.edu.tw/NUBlog/index/index.php
 // @match	http://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/login.php
 // @match http://miswww1.cc.ccu.edu.tw/pt_proj/index.php
 //
 // opera
+// @include       http://portal.ccu.edu.tw/index.php
 // @include       http://ecourse.elearning.ccu.edu.tw/
 // @include	http://myhome.ccu.edu.tw/NUBlog/index/index.php
 // @include	http://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/login.php
 // @include http://miswww1.cc.ccu.edu.tw/pt_proj/index.php
-// @version       2.0
+// @version       2.1
 // ==/UserScript==
 
 /*
 	Author: carlcarl
-	Version: 2.0
+	Version: 2.1
 */
 
 (function() 
@@ -143,7 +145,12 @@
 	{
 		GM_setValue(window.location.href + "-id",  $$('ccu-id').value);
 		GM_setValue(window.location.href + "-pass",  $$('ccu-pass').value);
-		if(window.location.href == 'http://myhome.ccu.edu.tw/NUBlog/index/index.php')
+		if(window.location.href == 'http://portal.ccu.edu.tw/index.php')
+		{
+			$$('acc').value = $$('ccu-id').value;
+			$$('pass').value = $$('ccu-pass').value;
+		}
+		else if(window.location.href == 'http://myhome.ccu.edu.tw/NUBlog/index/index.php')
 		{
 			$$('member_id').value = $$('ccu-id').value;
 			$$('member_pw').value = $$('ccu-pass').value;
@@ -178,8 +185,6 @@
 	
 	window.addEventListener('load', function (e)
 	{
-		if($$('Layer1') != undefined)
-			$$('Layer1').style.top = '3px';
 		if (e.target instanceof  Document) 
 		{ 
 			var idValue = (scriptConfig.id == undefined)? "" : scriptConfig.id;
@@ -190,11 +195,17 @@
 			var _option = '';
 			var _id;
 			var _pass;
-			
-			if(window.location.href == 'http://myhome.ccu.edu.tw/NUBlog/index/index.php') //工讀系統
+		
+			if(window.location.href == 'http://portal.ccu.edu.tw/index.php')
+			{
+				_box = $$('form');
+				_id = $$('acc');
+				_pass = $$('pass');
+			}
+			else if(window.location.href == 'http://myhome.ccu.edu.tw/NUBlog/index/index.php') //工讀系統
 			{
 				s = s + "left:400px;";
-				_box = document.getElementById('login');
+				_box = $$('login');
 				_id = $$('member_id');
 				_pass = $$('member_pw');
 			}
